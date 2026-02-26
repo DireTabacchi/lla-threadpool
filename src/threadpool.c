@@ -6,6 +6,29 @@
 #include "../inc/threadpool.h"
 
 void* thread_function(void* varg) {
+    threadpool_t* pool = (threadpool_t*)varg;
+
+    while(1) {
+        pthread_mutex_lock(&(pool->lock));
+
+        while (pool->queued == 0 && !pool->stop) {
+            pthread_cond_wait(&(pool->notify), &(pool->lock));
+        }
+
+        if (pool->stop) {
+            pthread_mutex_unlock(&(pool->lock));
+            pthread_exit(NULL);
+        }
+
+        task_t task = pool->task_queue[pool->queue_front];
+        pool->queue_front = (pool->queue_front + 1) % QUEUE_SIZE;
+        pool->queued--;
+
+        pthread_mutex_unlock(&(pool->lock));
+
+        (*(task.fn))(task.arg);
+    }
+
     return NULL;
 }
 
