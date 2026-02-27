@@ -75,4 +75,4 @@ void threadpool_add_task(threadpool_t *pool, void (*function)(void *), void *arg
     pthread_mutex_unlock(&(pool->lock));
 }
 
-void example_task(void *arg) {}
+//void example_task(void *arg) {}
