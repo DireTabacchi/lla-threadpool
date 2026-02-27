@@ -47,6 +47,10 @@ void threadpool_init(threadpool_t *pool) {
 }
 
 void threadpool_destroy(threadpool_t *pool) {
+    if (pool == NULL) {
+        printf("Nothing to destroy.\n");
+        return;
+    }
     pthread_mutex_lock(&(pool->lock));
     pool->stop = 1;
 
@@ -62,7 +66,6 @@ void threadpool_destroy(threadpool_t *pool) {
 }
 
 void threadpool_add_task(threadpool_t *pool, void (*function)(void *), void *arg) {
-
     if (pool == NULL) {
         printf("Invalid threadpool.\n");
         return;
