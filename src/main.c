@@ -7,6 +7,7 @@ void example_task(void* arg) {
     int* num = (int*)arg;
     printf("Processing task %d\n", *num);
     sleep(1);
+    free(arg);
 }
 
 int main() {
