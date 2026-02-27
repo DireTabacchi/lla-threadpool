@@ -63,6 +63,11 @@ void threadpool_destroy(threadpool_t *pool) {
 
 void threadpool_add_task(threadpool_t *pool, void (*function)(void *), void *arg) {
 
+    if (pool == NULL) {
+        printf("Invalid threadpool.\n");
+        return;
+    }
+
     pthread_mutex_lock(&(pool->lock));
 
     int next_back = (pool->queue_back + 1) % QUEUE_SIZE;
