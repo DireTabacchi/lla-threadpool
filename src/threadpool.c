@@ -5,8 +5,8 @@
 
 #include "../inc/threadpool.h"
 
-void* thread_function(void* varg) {
-    threadpool_t* pool = (threadpool_t*)varg;
+void* thread_function(void* threadpool) {
+    threadpool_t* pool = (threadpool_t*)threadpool;
 
     while(1) {
         pthread_mutex_lock(&(pool->lock));
@@ -33,6 +33,10 @@ void* thread_function(void* varg) {
 }
 
 void threadpool_init(threadpool_t *pool) {
+    if (pool == NULL) {
+        printf("No pool to init.\n");
+        return;
+    }
     pool->queued = 0;
     pool->queue_front = 0;
     pool->queue_back = 0;
